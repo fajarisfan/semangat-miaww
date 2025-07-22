@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Semangat, Kamu Bisa!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefafc;
+      text-align: center;
+      padding: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #ffd1dc;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .quote {
+      margin-top: 30px;
+      font-size: 20px;
+      color: #444;
+      min-height: 60px;
+    }
+    img {
+      max-width: 120px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐾 Semangat dari Kucing Kesayangan 🐾</h1>
+  <p>Kalo kamu lagi capek, klik tombol di bawah ya!</p>
+  <button onclick="showQuote()">Klik Aku 🐱</button>
+  <div class="quote" id="quote"></div>
+  <img src="https://media.tenor.com/4blTVLZC_0IAAAAi/cute-cat.gif" alt="kucing semangat">
+
+  <script>
+    const quotes = [
+      "Hari ini boleh berat, tapi kamu lebih kuat dari itu 💪",
+      "Nggak apa-apa istirahat, asal jangan menyerah ya~ 😺",
+      "Insecure itu wajar, tapi jangan lupa... kamu berharga ✨",
+      "Satu langkah kecil tetap lebih baik dari diem aja 🐾",
+      "Kucing aja bisa tenang walau hidupnya nggak pasti 🐱 Kamu juga bisa~",
+      "Aku percaya kamu bisa lewatin ini... pelan-pelan aja 💖",
+      "Masa depan belum datang, jadi jangan takut duluan 😌",
+      "Jangan bandingin dirimu sama orang lain. Kamu punya waktumu sendiri 🕰️",
+      "Kalau kucing bisa ngejar laser pointer, kamu juga bisa ngejar impianmu 🐈💫",
+      "Tenang... kamu nggak sendiri. Banyak yang sayang kamu, percaya deh 🌸"
+    ];
+
+    function showQuote() {
+      const random = Math.floor(Math.random() * quotes.length);
+      document.getElementById('quote').innerText = quotes[random];
+    }
+  </script>
+</body>
+</html>
