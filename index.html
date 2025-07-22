@@ -2,13 +2,17 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Semangat, Kamu Bisa!</title>
+  <title>Kejutan Semangat</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #fefafc;
       text-align: center;
       padding: 50px;
+      transition: all 0.5s ease;
+    }
+    .hidden {
+      display: none;
     }
     button {
       padding: 10px 20px;
@@ -32,11 +36,23 @@
   </style>
 </head>
 <body>
-  <h1>🐾 Semangat dari Kucing Kesayangan 🐾</h1>
-  <p>Kalo kamu lagi capek, klik tombol di bawah ya!</p>
-  <button onclick="showQuote()">Klik Aku 🐱</button>
-  <div class="quote" id="quote"></div>
-  <img src="https://media.tenor.com/4blTVLZC_0IAAAAi/cute-cat.gif" alt="kucing semangat">
+
+  <!-- Halaman Pembuka -->
+  <div id="intro">
+    <h1>Eh... jangan dibuka dulu deh 😳</h1>
+    <p>Tapi... yaudah deh kalau udah terlanjur buka 🙈</p>
+    <p>Aku cuma mau bilang satu hal...</p>
+    <button onclick="nextPage()">Lanjutkan 💌</button>
+  </div>
+
+  <!-- Halaman Semangat Kucing -->
+  <div id="main" class="hidden">
+    <h1>🐾 Semangat dari Kucing Kesayangan 🐾</h1>
+    <p>Kalo kamu lagi capek, klik tombol di bawah ya!</p>
+    <button onclick="showQuote()">Klik Aku 🐱</button>
+    <div class="quote" id="quote"></div>
+    <img src="https://media.tenor.com/4blTVLZC_0IAAAAi/cute-cat.gif" alt="kucing semangat">
+  </div>
 
   <script>
     const quotes = [
@@ -52,10 +68,16 @@
       "Tenang... kamu nggak sendiri. Banyak yang sayang kamu, percaya deh 🌸"
     ];
 
+    function nextPage() {
+      document.getElementById('intro').classList.add('hidden');
+      document.getElementById('main').classList.remove('hidden');
+    }
+
     function showQuote() {
       const random = Math.floor(Math.random() * quotes.length);
       document.getElementById('quote').innerText = quotes[random];
     }
   </script>
+
 </body>
 </html>
