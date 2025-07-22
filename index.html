@@ -1,83 +1,404 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Kejutan Semangat</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Dapatkan semangat dari kucing kesayanganmu! Pesan positif dan lucu untuk hari-harimu yang butuh dorongan.">
+  <title>Semangat! dari Kucing 🐾</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fefafc;
+      background: #111;
+      color: #fff;
       text-align: center;
-      padding: 50px;
-      transition: all 0.5s ease;
+      padding: 50px 20px;
+      display: flex; /* Untuk centering konten */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .content-wrapper {
+      max-width: 600px; /* Lebar maksimal konten */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .hidden {
       display: none;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #ffd1dc;
-      color: #333;
+    h2, h1 {
+      margin-bottom: 20px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    /* Gaya untuk tombol utama (Klik Aku) */
+    #startBtn, #next1, #showQuote {
+      background-color: #ff5e5e;
       border: none;
-      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1.1em;
       cursor: pointer;
-    }
-    .quote {
-      margin-top: 30px;
-      font-size: 20px;
-      color: #444;
-      min-height: 60px;
-    }
-    img {
-      max-width: 120px;
+      border-radius: 12px;
       margin-top: 20px;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    #startBtn:hover, #next1:hover, #showQuote:hover {
+      background-color: #e24e4e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    #startBtn:active, #next1:active, #showQuote:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    /* Gaya untuk area kutipan */
+    .quote-area {
+      opacity: 0;
+      margin-top: 30px;
+      font-size: 1.2em;
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+      transform: translateY(20px);
+      min-height: 120px; /* Ruang cukup untuk 2 baris kutipan */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff; /* Pastikan teks kutipan juga putih */
+    }
+    .quote-area.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .quote-area p {
+        margin: 5px 0; /* Sedikit jarak antar baris kutipan */
+    }
+    /* Gaya untuk tombol dinamis (Dapat Pesan Lagi!) */
+    #dynamicQuoteButton { 
+      margin-top: 25px; /* Jarak dari kutipan */
+      padding: 10px 22px;
+      font-size: 1em;
+      background-color: #5eff5e; /* Warna hijau cerah */
+      color: #1a1a1a; /* Warna teks gelap */
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: none; /* Sembunyikan secara default */
+    }
+    #dynamicQuoteButton:hover {
+      background-color: #4ee24e;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    #dynamicQuoteButton:active {
+        transform: translateY(0);
+    }
+    /* Gaya untuk tombol Selesai */
+    #finishButton {
+        margin-top: 20px; /* Jarak dari tombol dinamis atau gambar kucing */
+        padding: 12px 25px;
+        font-size: 1.1em;
+        background-color: #5e5eff; /* Warna biru */
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        display: none; /* Sembunyikan secara default */
+    }
+    #finishButton:hover {
+        background-color: #4e4ee2;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    #finishButton:active {
+        transform: translateY(0);
+    }
+
+    /* Gaya untuk gambar kucing */
+    .cat-gif {
+      max-width: 150px;
+      margin-top: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      display: none; /* Sembunyikan secara default */
+    }
+    .cat-gif.show {
+      display: block; /* Tampilkan saat dibutuhkan */
+    }
+    
+    /* Gaya untuk kalimat penutup */
+    .closing-message {
+        margin-top: 40px; /* Jarak lebih besar dari elemen di atasnya */
+        font-size: 1.2em;
+        color: #fff; /* Warna putih agar menonjol sebagai akhir */
+        opacity: 0; /* Mulai tersembunyi */
+        transition: opacity 1.5s ease-in-out; /* Transisi untuk kemunculan halus */
+    }
+    .closing-message.show {
+        opacity: 1;
+    }
+
+    /* Animasi pulse untuk tombol */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .pulse-animation {
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    /* Responsif untuk layar kecil */
+    @media (max-width: 600px) {
+      body {
+        padding: 30px 15px;
+      }
+      h2, h1 {
+        font-size: 1.5em;
+      }
+      #startBtn, #next1, #showQuote, #dynamicQuoteButton, #finishButton {
+        padding: 10px 20px;
+        font-size: 1em;
+      }
+      .quote-area {
+        font-size: 1em;
+        min-height: 100px;
+      }
+      .cat-gif {
+        max-width: 120px;
+      }
+      .closing-message {
+          margin-top: 25px;
+          font-size: 1em;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="content-wrapper">
+    <h1 id="mainTitle">Psst... Klik Aku 👀</h1>
+    <button id="startBtn">Klik Aku</button>
 
-  <!-- Halaman Pembuka -->
-  <div id="intro">
-    <h1>Eh... jangan dibuka dulu deh 😳</h1>
-    <p>Tapi... yaudah deh kalau udah terlanjur buka 🙈</p>
-    <p>Aku cuma mau bilang satu hal...</p>
-    <button onclick="nextPage()">Lanjutkan 💌</button>
-  </div>
+    <div id="introStep1" class="hidden">
+      <p>"Aku nggak tau kamu lagi sibuk atau santai… tapi kalau kamu buka ini, aku seneng banget."</p>
+      <button id="next1">Lanjutkan</button>
+    </div>
 
-  <!-- Halaman Semangat Kucing -->
-  <div id="main" class="hidden">
-    <h1>🐾 Semangat dari Kucing Kesayangan 🐾</h1>
-    <p>Kalo kamu lagi capek, klik tombol di bawah ya!</p>
-    <button onclick="showQuote()">Klik Aku 🐱</button>
-    <div class="quote" id="quote"></div>
-    <img src="https://media.tenor.com/4blTVLZC_0IAAAAi/cute-cat.gif" alt="kucing semangat">
+    <div id="introStep2" class="hidden">
+      <p>"Butuh semangat hari ini? Aku punya sesuatu buat kamu…"</p>
+      <button id="showQuote">Butuh Semangat?</button>
+    </div>
+
+    <div id="mainContent" class="hidden">
+      <div id="quoteArea" class="quote-area">
+        <p id="quoteLine1"></p>
+        <p id="quoteLine2"></p>
+      </div>
+
+      <button id="dynamicQuoteButton" class="dynamic-button" onclick="showNewQuote()"></button>
+
+      <img src="https://media.tenor.com/4blTVLZC_0IAAAAi/cute-cat.gif" alt="kucing semangat" class="cat-gif">
+      
+      <button id="finishButton" onclick="showFinalClosing()">Selesai ✨</button>
+
+      <p id="finalClosingMessage" class="closing-message">
+        Makasih banyak sudah mampir dan mau menyemangati diri sendiri, lho! Kucingnya ikutan bangga padamu~ 🥰
+      </p>
+    </div>
   </div>
 
   <script>
-    const quotes = [
-      "Hari ini boleh berat, tapi kamu lebih kuat dari itu 💪",
-      "Nggak apa-apa istirahat, asal jangan menyerah ya~ 😺",
-      "Insecure itu wajar, tapi jangan lupa... kamu berharga ✨",
-      "Satu langkah kecil tetap lebih baik dari diem aja 🐾",
-      "Kucing aja bisa tenang walau hidupnya nggak pasti 🐱 Kamu juga bisa~",
-      "Aku percaya kamu bisa lewatin ini... pelan-pelan aja 💖",
-      "Masa depan belum datang, jadi jangan takut duluan 😌",
-      "Jangan bandingin dirimu sama orang lain. Kamu punya waktumu sendiri 🕰️",
-      "Kalau kucing bisa ngejar laser pointer, kamu juga bisa ngejar impianmu 🐈💫",
-      "Tenang... kamu nggak sendiri. Banyak yang sayang kamu, percaya deh 🌸"
+    const mainTitle = document.getElementById("mainTitle");
+    const startBtn = document.getElementById("startBtn");
+    const introStep1 = document.getElementById("introStep1");
+    const next1 = document.getElementById("next1");
+    const introStep2 = document.getElementById("introStep2");
+    const showQuote = document.getElementById("showQuote");
+
+    const mainContentSection = document.getElementById("mainContent");
+    const quoteArea = document.getElementById("quoteArea");
+    const quoteLine1 = document.getElementById("quoteLine1");
+    const quoteLine2 = document.getElementById("quoteLine2");
+    const dynamicQuoteButton = document.getElementById("dynamicQuoteButton");
+    const catGif = document.querySelector(".cat-gif"); 
+    const finishButton = document.getElementById("finishButton"); 
+    const finalClosingMessage = document.getElementById("finalClosingMessage"); // Mengganti nama ID untuk kejelasan
+
+    const originalQuotes = [ // Daftar kutipan asli, diperbanyak
+      {
+        line1: "Hidup memang kadang bikin lelah...",
+        line2: "tapi jangan lupa, kamu hebat karena sudah bertahan sejauh ini. ✨"
+      },
+      {
+        line1: "Nggak apa-apa kalau hari ini terasa berat.",
+        line2: "Kucing aja butuh tidur siang. Kamu juga boleh istirahat. 😴"
+      },
+      {
+        line1: "Insecure itu manusiawi kok!",
+        line2: "Tapi inget, kamu berharga dan istimewa dengan caramu sendiri. 💖"
+      },
+      {
+        line1: "Satu langkah kecil tetap lebih baik dari diem aja 🐾",
+        line2: "Maju terus ya, aku temenin! 💪"
+      },
+      {
+        line1: "Kucing aja bisa tenang walau hidupnya nggak pasti 🐱",
+        line2: "Kamu juga bisa kok, percaya diri sedikit lagi! ✨"
+      },
+      {
+        line1: "Aku percaya kamu bisa lewatin ini...",
+        line2: "pelan-pelan aja, yang penting jangan nyerah ya! 💖"
+      },
+      {
+        line1: "Masa depan belum datang, jadi jangan takut duluan 😌",
+        line2: "Fokus ke apa yang bisa kamu lakukan hari ini!"
+      },
+      {
+        line1: "Jangan bandingin dirimu sama orang lain.",
+        line2: "Kamu punya waktumu sendiri untuk bersinar 🕰️"
+      },
+      {
+        line1: "Kalau kucing bisa ngejar laser pointer secepat itu,",
+        line2: "kamu juga bisa ngejar impianmu kok, percaya deh! 🐈💫"
+      },
+      {
+        line1: "Tenang... kamu nggak sendiri.",
+        line2: "Banyak yang sayang kamu, percaya deh 🌸 Jangan nyerah!"
+      },
+      {
+        line1: "Setiap hari adalah kesempatan baru.",
+        line2: "Coba lagi besok, kamu pasti bisa! 😊"
+      },
+      {
+        line1: "Kalo ada masalah, coba liat kucingku.",
+        line2: "Dia aja bisa tidur 20 jam sehari, kamu juga butuh istirahat! 😽"
+      },
+      {
+        line1: "Jangan biarkan hari yang buruk",
+        line2: "membuatmu berpikir kamu punya hidup yang buruk. Kamu kuat! 💪"
+      },
+      {
+        line1: "Ingat, setiap rintangan adalah pelajaran.",
+        line2: "Kamu sudah melewati banyak hal hebat lho! ✨"
+      }
     ];
 
-    function nextPage() {
-      document.getElementById('intro').classList.add('hidden');
-      document.getElementById('main').classList.remove('hidden');
+    let availableQuotes = []; // Kutipan yang belum ditampilkan
+    
+    const dynamicButtonTexts = [
+      "Dapat Pesan Lagi! ✨",
+      "Kutipan Lainnya 🔄",
+      "Ayooo! 💪",
+      "Mau Denger Lagi? 🎶",
+      "Satu Lagi Deh! 🍀",
+      "Klik Aku Lagi! 😸",
+      "Kasih Semangat Lagi! 🚀",
+      "Yes, Please! 🙏",
+      "Oke, Lanjut! ➡️"
+    ];
+
+    // Fungsi untuk mengacak array (Fisher-Yates shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Tukar elemen
+        }
+        return array;
     }
 
-    function showQuote() {
-      const random = Math.floor(Math.random() * quotes.length);
-      document.getElementById('quote').innerText = quotes[random];
+    // Alur interaksi
+    startBtn.onclick = () => {
+      mainTitle.classList.add('hidden');
+      startBtn.classList.add('hidden');
+      introStep1.classList.remove('hidden');
+    };
+
+    next1.onclick = () => {
+      introStep1.classList.add('hidden');
+      introStep2.classList.remove('hidden');
+    };
+
+    showQuote.onclick = () => {
+      introStep2.classList.add('hidden');
+      mainContentSection.classList.remove('hidden');
+      catGif.classList.add("show"); // Tampilkan gambar kucing
+      
+      // Reset dan acak kutipan untuk sesi baru
+      availableQuotes = shuffleArray([...originalQuotes]); 
+
+      showNewQuote(); // Tampilkan kutipan pertama kali di mainContent
+    };
+
+
+    // Fungsi untuk menampilkan kutipan baru dan mengganti teks tombol dinamis
+    function showNewQuote() {
+      // Sembunyikan kutipan dan tombol dinamis sementara untuk efek transisi
+      quoteArea.classList.remove("show");
+      dynamicQuoteButton.style.display = "none";
+      finalClosingMessage.classList.remove("show"); // Pastikan pesan penutup tersembunyi
+
+      setTimeout(() => {
+        if (availableQuotes.length > 0) {
+            // Ambil kutipan dari antrean dan hapus dari antrean
+            const selectedQuote = availableQuotes.shift(); 
+
+            // Isi teks kutipan
+            quoteLine1.innerText = selectedQuote.line1;
+            quoteLine2.innerText = selectedQuote.line2;
+
+            // Tampilkan kutipan
+            quoteArea.classList.add("show");
+
+            // Jika masih ada kutipan di antrean, tampilkan tombol dinamis
+            if (availableQuotes.length > 0) {
+                const randomButtonTextIndex = Math.floor(Math.random() * dynamicButtonTexts.length);
+                dynamicQuoteButton.innerText = dynamicButtonTexts[randomButtonTextIndex];
+                dynamicQuoteButton.style.display = 'inline-block';
+                finishButton.style.display = 'none'; // Pastikan tombol Selesai tetap tersembunyi
+            } else {
+                // Jika semua kutipan sudah ditampilkan (antrean kosong)
+                // Ini adalah saat yang tepat untuk menampilkan tombol "Selesai ✨"
+                dynamicQuoteButton.style.display = 'none'; // Sembunyikan tombol Dapat Pesan Lagi!
+                finishButton.style.display = 'inline-block'; // Tampilkan tombol Selesai ✨
+            }
+        } else {
+            // Ini bisa terjadi jika showNewQuote dipanggil lagi setelah semua kutipan habis.
+            // Dalam kasus ini, kita pastikan tombol "Selesai" tetap terlihat.
+            dynamicQuoteButton.style.display = 'none';
+            finishButton.style.display = 'inline-block';
+        }
+      }, 500); // Jeda singkat untuk efek "fade out" sebelum "fade in" yang baru
     }
+
+    // Fungsi untuk menampilkan pesan penutup akhir
+    function showFinalClosing() {
+        // Sembunyikan semua elemen interaktif lainnya
+        quoteArea.classList.remove("show");
+        dynamicQuoteButton.style.display = "none";
+        catGif.classList.remove("show"); 
+        finishButton.style.display = "none"; 
+        
+        // Tampilkan pesan penutup dengan transisi
+        setTimeout(() => {
+            finalClosingMessage.classList.add("show");
+            // Opsional: Kamu bisa juga menyembunyikan mainContentSection jika mau tampilan bersih
+            // mainContentSection.innerHTML = ''; 
+            // mainContentSection.appendChild(finalClosingMessage); 
+        }, 300); 
+    }
+
+    // Tambahkan animasi pulse pada tombol utama saat halaman dimuat
+    document.addEventListener("DOMContentLoaded", () => {
+        startBtn.classList.add("pulse-animation");
+    });
+
   </script>
-
 </body>
 </html>
